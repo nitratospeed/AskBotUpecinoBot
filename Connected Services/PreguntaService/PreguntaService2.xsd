@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://preguntaservice.azurewebsites.net/PreguntaService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" />
+  <xs:element name="preguntar">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IDPregunta" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="preguntarResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" minOccurs="0" name="preguntarResult" nillable="true" type="q1:Pregunta" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="crear">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IDAlumno" type="xs:int" />
+        <xs:element minOccurs="0" name="IDcurso" type="xs:int" />
+        <xs:element minOccurs="0" name="Descripcion" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Nivel" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="respuesta" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="crearResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" minOccurs="0" name="crearResult" nillable="true" type="q2:Pregunta" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cursado">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IDCurso" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cursadoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" minOccurs="0" name="cursadoResult" nillable="true" type="q3:Curso" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListarCurso">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListarCursoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" minOccurs="0" name="ListarCursoResult" nillable="true" type="q4:ArrayOfCurso" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PreguntaService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://preguntaservice.azurewebsites.net/PreguntaService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://preguntaservice.azurewebsites.net/PreguntaService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" />
+      <xsd:import schemaLocation="http://preguntaservice.azurewebsites.net/PreguntaService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IPreguntaService_preguntar_InputMessage">
+    <wsdl:part name="parameters" element="tns:preguntar" />
+  </wsdl:message>
+  <wsdl:message name="IPreguntaService_preguntar_OutputMessage">
+    <wsdl:part name="parameters" element="tns:preguntarResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPreguntaService_preguntar_PreguntaExistenteFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" name="detail" element="q1:PreguntaExistente" />
+  </wsdl:message>
+  <wsdl:message name="IPreguntaService_crear_InputMessage">
+    <wsdl:part name="parameters" element="tns:crear" />
+  </wsdl:message>
+  <wsdl:message name="IPreguntaService_crear_OutputMessage">
+    <wsdl:part name="parameters" element="tns:crearResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPreguntaService_crear_PreguntaExistenteFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" name="detail" element="q2:PreguntaExistente" />
+  </wsdl:message>
+  <wsdl:message name="IPreguntaService_cursado_InputMessage">
+    <wsdl:part name="parameters" element="tns:cursado" />
+  </wsdl:message>
+  <wsdl:message name="IPreguntaService_cursado_OutputMessage">
+    <wsdl:part name="parameters" element="tns:cursadoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPreguntaService_cursado_PreguntaExistenteFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" name="detail" element="q3:PreguntaExistente" />
+  </wsdl:message>
+  <wsdl:message name="IPreguntaService_ListarCurso_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListarCurso" />
+  </wsdl:message>
+  <wsdl:message name="IPreguntaService_ListarCurso_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListarCursoResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IPreguntaService">
+    <wsdl:operation name="preguntar">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPreguntaService/preguntar" message="tns:IPreguntaService_preguntar_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPreguntaService/preguntarResponse" message="tns:IPreguntaService_preguntar_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IPreguntaService/preguntarPreguntaExistenteFault" name="PreguntaExistenteFault" message="tns:IPreguntaService_preguntar_PreguntaExistenteFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="crear">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPreguntaService/crear" message="tns:IPreguntaService_crear_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPreguntaService/crearResponse" message="tns:IPreguntaService_crear_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IPreguntaService/crearPreguntaExistenteFault" name="PreguntaExistenteFault" message="tns:IPreguntaService_crear_PreguntaExistenteFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="cursado">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPreguntaService/cursado" message="tns:IPreguntaService_cursado_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPreguntaService/cursadoResponse" message="tns:IPreguntaService_cursado_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IPreguntaService/cursadoPreguntaExistenteFault" name="PreguntaExistenteFault" message="tns:IPreguntaService_cursado_PreguntaExistenteFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListarCurso">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPreguntaService/ListarCurso" message="tns:IPreguntaService_ListarCurso_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPreguntaService/ListarCursoResponse" message="tns:IPreguntaService_ListarCurso_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IPreguntaService" type="tns:IPreguntaService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="preguntar">
+      <soap:operation soapAction="http://tempuri.org/IPreguntaService/preguntar" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="PreguntaExistenteFault">
+        <soap:fault use="literal" name="PreguntaExistenteFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="crear">
+      <soap:operation soapAction="http://tempuri.org/IPreguntaService/crear" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="PreguntaExistenteFault">
+        <soap:fault use="literal" name="PreguntaExistenteFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cursado">
+      <soap:operation soapAction="http://tempuri.org/IPreguntaService/cursado" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="PreguntaExistenteFault">
+        <soap:fault use="literal" name="PreguntaExistenteFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ListarCurso">
+      <soap:operation soapAction="http://tempuri.org/IPreguntaService/ListarCurso" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PreguntaService">
+    <wsdl:port name="BasicHttpBinding_IPreguntaService" binding="tns:BasicHttpBinding_IPreguntaService">
+      <soap:address location="http://preguntaservice.azurewebsites.net/PreguntaService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

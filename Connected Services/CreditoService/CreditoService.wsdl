@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CreditoService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="BasicHttpsBinding_ICreditoService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://creditosservice.azurewebsites.net/CreditoService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://creditosservice.azurewebsites.net/CreditoService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://creditosservice.azurewebsites.net/CreditoService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/SOAPServices.Dominio" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ICreditoService_CrearCredito_InputMessage">
+    <wsdl:part name="parameters" element="tns:CrearCredito" />
+  </wsdl:message>
+  <wsdl:message name="ICreditoService_CrearCredito_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CrearCreditoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICreditoService_EliminarCredito_InputMessage">
+    <wsdl:part name="parameters" element="tns:EliminarCredito" />
+  </wsdl:message>
+  <wsdl:message name="ICreditoService_EliminarCredito_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EliminarCreditoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICreditoService_ListarCreditos_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListarCreditos" />
+  </wsdl:message>
+  <wsdl:message name="ICreditoService_ListarCreditos_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListarCreditosResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ICreditoService">
+    <wsdl:operation name="CrearCredito">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICreditoService/CrearCredito" message="tns:ICreditoService_CrearCredito_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICreditoService/CrearCreditoResponse" message="tns:ICreditoService_CrearCredito_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EliminarCredito">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICreditoService/EliminarCredito" message="tns:ICreditoService_EliminarCredito_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICreditoService/EliminarCreditoResponse" message="tns:ICreditoService_EliminarCredito_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListarCreditos">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICreditoService/ListarCreditos" message="tns:ICreditoService_ListarCreditos_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICreditoService/ListarCreditosResponse" message="tns:ICreditoService_ListarCreditos_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ICreditoService" type="tns:ICreditoService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CrearCredito">
+      <soap:operation soapAction="http://tempuri.org/ICreditoService/CrearCredito" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminarCredito">
+      <soap:operation soapAction="http://tempuri.org/ICreditoService/EliminarCredito" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListarCreditos">
+      <soap:operation soapAction="http://tempuri.org/ICreditoService/ListarCreditos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpsBinding_ICreditoService" type="tns:ICreditoService">
+    <wsp:PolicyReference URI="#BasicHttpsBinding_ICreditoService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CrearCredito">
+      <soap:operation soapAction="http://tempuri.org/ICreditoService/CrearCredito" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminarCredito">
+      <soap:operation soapAction="http://tempuri.org/ICreditoService/EliminarCredito" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListarCreditos">
+      <soap:operation soapAction="http://tempuri.org/ICreditoService/ListarCreditos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CreditoService">
+    <wsdl:port name="BasicHttpBinding_ICreditoService" binding="tns:BasicHttpBinding_ICreditoService">
+      <soap:address location="http://creditosservice.azurewebsites.net/CreditoService.svc" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpsBinding_ICreditoService" binding="tns:BasicHttpsBinding_ICreditoService">
+      <soap:address location="https://creditosservice.azurewebsites.net/CreditoService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
