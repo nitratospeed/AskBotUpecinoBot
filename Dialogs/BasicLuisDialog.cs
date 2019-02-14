@@ -8,6 +8,8 @@ using LuisBot.CreditoService;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
+using Microsoft.Bot.Connector;
+using AdaptiveCards;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -31,6 +33,13 @@ namespace Microsoft.Bot.Sample.LuisBot
         //inicio flujo de saludo
         [LuisIntent("Saludo")]
         public async Task SaludoIntent(IDialogContext context, LuisResult result)
+        {      
+            //https://loginrestapi.herokuapp.com/users/5c6464cb80c14700177f7125
+
+            PromptDialog.Text(context, AfterSaludoPrompt, $"Ahora puede realizar o buscar una pregunta");
+        }
+
+        private async Task AfterSaludoPrompt(IDialogContext context, IAwaitable<string> result)
         {
             PreguntaServiceClient preguntaServiceClient = new PreguntaServiceClient();
             string[] cursos = preguntaServiceClient.ListarCurso().Select(m => m.Nombre).ToArray();
@@ -38,7 +47,7 @@ namespace Microsoft.Bot.Sample.LuisBot
             var options = cursos;
             var descriptions = cursos;
             PromptDialog.Choice<string>(context, After_CursoPrompt,
-                options, "¡Bienvenido a Ask Bot Upecino!, ¿Qué curso deseas consultar?", descriptions: descriptions);
+                options, "Escoja un curso a consultar:", descriptions: descriptions);
         }
 
         private async Task After_CursoPrompt(IDialogContext context, IAwaitable<string> result)
@@ -96,7 +105,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         }
         //fin flujo pregunta
 
-        private async Task ShowLuisResult(IDialogContext context, LuisResult result) 
+        private async Task ShowLuisResult(IDialogContext context, LuisResult result)
         {
             await context.PostAsync($"Escogiste {result.Intents[0].Intent}. Dijiste: {result.Query}");
             context.Wait(MessageReceived);
