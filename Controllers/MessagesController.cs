@@ -45,59 +45,6 @@ namespace Microsoft.Bot.Sample.LuisBot
             }
             else if (message.Type == ActivityTypes.ConversationUpdate)
             {
-                if (message.MembersAdded.Any(o => o.Id == message.Recipient.Id))
-                {
-                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
-                    Activity replyToConversation = message.CreateReply("¡Bienvenido a Ask Bot Upecino!, Para comenzar, debes iniciar sesión o registrarte");
-                    AdaptiveCard card = new AdaptiveCard()
-                    {
-                        // Buttons
-                        Actions = new List<ActionBase>() {
-                            new ShowCardAction()
-                            {
-                                Title = "Iniciar Sesión",
-                                Speak = "<s>Iniciar Sesión</s>",
-                                Card = new AdaptiveCard()
-                                {
-                                    Body = new List<CardElement>()
-                                    {
-                                        new TextBlock()
-                                        {
-                                            Text = "Iniciar Sesión",
-                                            Speak = "<s>test</s>",
-                                            Weight = TextWeight.Bolder
-                                        }
-                                    }
-                                }
-                            },
-                            new ShowCardAction()
-                            {
-                                Title = "Regístrate",
-                                Speak = "<s>Regístrate</s>",
-                                Card = new AdaptiveCard()
-                                {
-                                    Body = new List<CardElement>()
-                                    {
-                                        new TextBlock()
-                                        {
-                                            Text = "Regístrate",
-                                            Speak = "<s>test</s>",
-                                            Weight = TextWeight.Bolder
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    };
-
-                    Attachment attachment = new Attachment()
-                    {
-                        ContentType = AdaptiveCard.ContentType,
-                        Content = card
-                    };
-                    replyToConversation.Attachments.Add(attachment);
-                    var reply = connector.Conversations.SendToConversationAsync(replyToConversation);
-                }
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
