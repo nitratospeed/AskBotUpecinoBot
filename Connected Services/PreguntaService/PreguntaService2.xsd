@@ -18,7 +18,7 @@
   <xs:element name="crear">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="IDAlumno" type="xs:int" />
+        <xs:element minOccurs="0" name="IDAlumno" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="IDcurso" type="xs:int" />
         <xs:element minOccurs="0" name="Descripcion" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="Nivel" nillable="true" type="xs:string" />
@@ -33,17 +33,17 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="cursado">
+  <xs:element name="ObtenerCurso">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="IDCurso" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="cursadoResponse">
+  <xs:element name="ObtenerCursoResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" minOccurs="0" name="cursadoResult" nillable="true" type="q3:Curso" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" minOccurs="0" name="ObtenerCursoResult" nillable="true" type="q3:Curso" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -56,6 +56,18 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" minOccurs="0" name="ListarCursoResult" nillable="true" type="q4:ArrayOfCurso" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListarPregunta">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListarPreguntaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio" minOccurs="0" name="ListarPreguntaResult" nillable="true" type="q5:ArrayOfPregunta" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -192,7 +192,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="auth.htm" />
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -211,6 +210,7 @@
     </Compile>
     <Compile Include="Dialogs\BasicLuisDialog.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Dominio\Cursos.cs" />
     <Compile Include="Dominio\Usuarios.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

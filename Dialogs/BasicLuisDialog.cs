@@ -26,6 +26,9 @@ namespace Microsoft.Bot.Sample.LuisBot
         private string Contrasena = "";
         private string Nombres = "";
         private string OpcionLoginSignUp = "";
+        private string token = "";
+        private string idCurso = "";
+        private string idPregunta = "";
 
         public BasicLuisDialog() : base(new LuisService(new LuisModelAttribute(
             ConfigurationManager.AppSettings["LuisAppId"], 
@@ -43,13 +46,25 @@ namespace Microsoft.Bot.Sample.LuisBot
         //inicio flujo de saludo
         [LuisIntent("Saludo")]
         public async Task SaludoIntent(IDialogContext context, LuisResult result)
-        {      
-            string[] login_signup = { "Iniciar Sesión", "Registrarse" };
+        {
+            if (token == "")
+            {
+                string[] login_signup = { "Iniciar Sesión", "Registrarse" };
 
-            var options = login_signup;
-            var descriptions = login_signup;
-            PromptDialog.Choice<string>(context, AfterSaludoPrompt,
-                options, "¡Bienvenido a Ask Bot Upecino!, Inicie Sesión o Regístrese para comenzar", descriptions: descriptions);
+                var options = login_signup;
+                var descriptions = login_signup;
+                PromptDialog.Choice<string>(context, AfterSaludoPrompt,
+                    options, "¡Bienvenido a Ask Bot Upecino!, Inicie Sesión o Regístrese para comenzar", descriptions: descriptions);
+            }
+            else
+            {
+                string[] opciones = { "Consultar Pregunta", "Crear Pregunta" };
+
+                var options = opciones;
+                var descriptions = opciones;
+                PromptDialog.Choice<string>(context, ConsultaCreaPregunta,
+                    options, $"{Nombres}, Escoge entre consultar o crear una pregunta:", descriptions: descriptions);
+            }
         }
 
         private async Task AfterSaludoPrompt(IDialogContext context, IAwaitable<string> result)
@@ -86,63 +101,140 @@ namespace Microsoft.Bot.Sample.LuisBot
 
         private async Task Member(IDialogContext context, IAwaitable<string> result)
         {
-            Contrasena = await result;
-
-            if (OpcionLoginSignUp == "Iniciar Sesión")
+            try
             {
-                //consumo login
-                string[] opciones = { "Consultar Pregunta", "Crear Pregunta" };
+                Contrasena = await result;
 
-                var options = opciones;
-                var descriptions = opciones;
-                PromptDialog.Choice<string>(context, ConsultaCreaPregunta,
-                    options, $"Hola {Nombres}, ahora escoge entre consultar o crear pregunta:", descriptions: descriptions);
+                if (OpcionLoginSignUp == "Iniciar Sesión")
+                {
+                    JavaScriptSerializer js = new JavaScriptSerializer();
+                    string tramaJson = "";
+
+                    LogIn logIn = new LogIn
+                    {
+                        access_token = "LmTXw9oHsVZhhjgllFQphiZfXXJJGVwF"
+                    };
+
+                    string postdata = js.Serialize(logIn);
+
+                    byte[] dataBytes = Encoding.UTF8.GetBytes(postdata);
+
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://loginrestapi.herokuapp.com/auth");
+
+                    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                    request.ContentLength = dataBytes.Length;
+                    request.ContentType = "application/json";
+                    request.Method = "POST";
+
+                    string authInfo = Correo + ":" + Contrasena;
+                    authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
+
+                    request.Headers.Add("Authorization", "Basic " + authInfo);
+
+                    using (Stream requestBody = request.GetRequestStream())
+                    {
+                        requestBody.Write(dataBytes, 0, dataBytes.Length);
+                    }
+
+                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                    using (Stream stream = response.GetResponseStream())
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        tramaJson = reader.ReadToEnd();
+                    }
+
+                    UsuarioObtenido usuarioObtenido = js.Deserialize<UsuarioObtenido>(tramaJson);
+
+                    token = usuarioObtenido.token;
+
+                    string[] opciones = { "Consultar Pregunta", "Crear Pregunta" };
+
+                    var options = opciones;
+                    var descriptions = opciones;
+                    PromptDialog.Choice<string>(context, ConsultaCreaPregunta,
+                        options, $"Hola {usuarioObtenido.user.name}, ahora escoge entre consultar o crear pregunta:", descriptions: descriptions);
+                }
+
+                else if (OpcionLoginSignUp == "Registrarse")
+                {
+                    JavaScriptSerializer js = new JavaScriptSerializer();
+                    string tramaJson = "";
+
+                    SignUp signUp = new SignUp
+                    {
+                        access_token = "LmTXw9oHsVZhhjgllFQphiZfXXJJGVwF",
+                        email = Correo,
+                        password = Contrasena,
+                        name = Nombres,
+                        picture = "",
+                        role = ""
+                    };
+
+                    string postdata = js.Serialize(signUp);
+
+                    byte[] dataBytes = Encoding.UTF8.GetBytes(postdata);
+
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://loginrestapi.herokuapp.com/users");
+
+                    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                    request.ContentLength = dataBytes.Length;
+                    request.ContentType = "application/json";
+                    request.Method = "POST";
+
+                    using (Stream requestBody = request.GetRequestStream())
+                    {
+                        requestBody.Write(dataBytes, 0, dataBytes.Length);
+                    }
+
+                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                    using (Stream stream = response.GetResponseStream())
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        tramaJson = reader.ReadToEnd();
+                    }
+
+                    UsuarioObtenido usuarioObtenido = js.Deserialize<UsuarioObtenido>(tramaJson);
+
+                    token = usuarioObtenido.token;
+
+                    string[] opciones = { "Consultar Pregunta", "Crear Pregunta" };
+
+                    var options = opciones;
+                    var descriptions = opciones;
+                    PromptDialog.Choice<string>(context, ConsultaCreaPregunta,
+                        options, $"Hola {usuarioObtenido.user.name}, ahora escoge entre consultar o crear pregunta:", descriptions: descriptions);
+                }
             }
 
-            else if (OpcionLoginSignUp == "Registrarse")
+            catch (WebException wex)
             {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                string tramaJson = "";
-                Usuarios usuarios = new Usuarios()
+                if (wex.Response != null)
                 {
-                    access_token = "LmTXw9oHsVZhhjgllFQphiZfXXJJGVwF",
-                    email = Correo,
-                    password = Contrasena,
-                    name = Nombres,
-                    picture = "",
-                    role = ""
-                };
-
-                string postdata = js.Serialize(usuarios);
-
-                byte[] dataBytes = Encoding.UTF8.GetBytes(postdata);
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://loginrestapi.herokuapp.com/users");
-
-                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-                request.ContentLength = dataBytes.Length;
-                request.ContentType = "application/json";
-                request.Method = "POST";
-
-                using (Stream requestBody = request.GetRequestStream())
-                {
-                    requestBody.Write(dataBytes, 0, dataBytes.Length);
+                    if (((HttpWebResponse)wex.Response).StatusCode.ToString() == "Unauthorized")
+                    {
+                        await context.PostAsync($"El usuario o contraseña ingresada no es correcta.");
+                        context.Wait(MessageReceived);
+                    }
+                    else
+                    {
+                        using (var errorResponse = (HttpWebResponse)wex.Response)
+                        {
+                            using (var reader = new StreamReader(errorResponse.GetResponseStream()))
+                            {
+                                string error = reader.ReadToEnd();
+                                JavaScriptSerializer js = new JavaScriptSerializer();
+                                UsuarioError usuarioError = js.Deserialize<UsuarioError>(error);
+                                await context.PostAsync($"Error en: {usuarioError.message}");
+                                context.Wait(MessageReceived);
+                            }
+                        }
+                    }
                 }
-
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    tramaJson = reader.ReadToEnd();
-                }
-                UsuarioCreado usuarioCreado = js.Deserialize<UsuarioCreado>(tramaJson);
-
-                string[] opciones = { "Consultar Pregunta", "Crear Pregunta" };
-
-                var options = opciones;
-                var descriptions = opciones;
-                PromptDialog.Choice<string>(context, ConsultaCreaPregunta,
-                    options, $"Hola {usuarioCreado.user.name}, ahora escoge entre consultar o crear pregunta:", descriptions: descriptions);
+            }
+            catch (Exception ex)
+            {
+                await context.PostAsync($"{ex.Message.ToString()}");
+                context.Wait(MessageReceived);
             }
         }
 
@@ -151,67 +243,117 @@ namespace Microsoft.Bot.Sample.LuisBot
             var seleccion = await result;
             if (seleccion == "Consultar Pregunta")
             {
-                PreguntaServiceClient preguntaServiceClient = new PreguntaServiceClient();
-                string[] cursos = preguntaServiceClient.ListarCurso().Select(m => m.Nombre).ToArray();
+                PreguntaServiceClient preguntaServiceClient = new PreguntaServiceClient();                
+                List<Curso> listaCursos = preguntaServiceClient.ListarCurso().ToList();
 
-                var options = cursos;
-                var descriptions = cursos;
                 PromptDialog.Choice<string>(context, ConsultarTema,
-                    options, $"Escoge un curso a consultar:", descriptions: descriptions);
+                    listaCursos.Select(x=>x.IdCurso.ToString()).AsEnumerable(), $"Escoge un curso a consultar:", descriptions: listaCursos.Select(x => x.Nombre).AsEnumerable());
             }
 
             else if (seleccion == "Crear Pregunta")
             {
-                PromptDialog.Text(context, After_PreguntaPrompt, "Primero escriba la pregunta...");
+                PreguntaServiceClient preguntaServiceClient = new PreguntaServiceClient();
+                List<Curso> listaCursos = preguntaServiceClient.ListarCurso().ToList();
+
+                PromptDialog.Choice<string>(context, After_Pregunta0Prompt,
+                    listaCursos.Select(x => x.IdCurso.ToString()).AsEnumerable(), $"Primero escoja un curso:", descriptions: listaCursos.Select(x => x.Nombre).AsEnumerable());
             }
         }
 
         private async Task ConsultarTema(IDialogContext context, IAwaitable<string> result)
         {
-            var selection = await result;
-            PromptDialog.Text(context, MostrarPregunta, $"¿Qué tema deseas consultar del curso de {selection} ?.");
+            idCurso = await result;
+
+            int idCursoint = Int32.Parse(idCurso);
+
+            PreguntaServiceClient preguntaServiceClient = new PreguntaServiceClient();
+            List<Pregunta> listaPreguntas = preguntaServiceClient.ListarPregunta().Where(x=>x.IDCurso==idCursoint).ToList();
+
+            PromptDialog.Choice<string>(context, MostrarPregunta,
+                listaPreguntas.Select(x => x.IDPregunta.ToString()).AsEnumerable(), $"Escoja una pregunta:", descriptions: listaPreguntas.Select(x => x.Descripcion).AsEnumerable());
         }
 
         private async Task MostrarPregunta(IDialogContext context, IAwaitable<string> result)
         {
-            await context.PostAsync($"Esta es la pregunta deseada...");
+            idPregunta = await result;
+
+            int idPreguntaint = Int32.Parse(idPregunta);
+
+            PreguntaServiceClient preguntaServiceClient = new PreguntaServiceClient();
+            Pregunta pregunta = preguntaServiceClient.preguntar(idPreguntaint);
+
+            await context.PostAsync($"Esta es la repuesta: { pregunta.respuesta }");
             context.Wait(MessageReceived);
         }
         // fin flujo de saludo
 
         //inicio flujo pregunta
+        private string currentCurso;
         private string currentPregunta;
         private string currentRespuesta;
         [LuisIntent("Pregunta")]
         public async Task PreguntaIntent(IDialogContext context, LuisResult result)
         {
-            PromptDialog.Text(context, After_PreguntaPrompt, "Primero escriba la pregunta...");
+            if (token == "")
+            {
+                string[] login_signup = { "Iniciar Sesión", "Registrarse" };
+
+                var options = login_signup;
+                var descriptions = login_signup;
+                PromptDialog.Choice<string>(context, AfterSaludoPrompt,
+                    options, "¡Bienvenido a Ask Bot Upecino!, Inicie Sesión o Regístrese para comenzar", descriptions: descriptions);
+            }
+            else
+            {
+                PreguntaServiceClient preguntaServiceClient = new PreguntaServiceClient();
+                List<Curso> listaCursos = preguntaServiceClient.ListarCurso().ToList();
+
+                PromptDialog.Choice<string>(context, After_Pregunta0Prompt,
+                    listaCursos.Select(x => x.IdCurso.ToString()).AsEnumerable(), $"Primero escoja un curso:", descriptions: listaCursos.Select(x => x.Nombre).AsEnumerable());
+            }
+        }
+
+        private async Task After_Pregunta0Prompt(IDialogContext context, IAwaitable<string> result)
+        {
+            currentCurso = await result;
+            PromptDialog.Text(context, After_PreguntaPrompt, "Ahora escriba una pregunta...");
         }
 
         private async Task After_PreguntaPrompt(IDialogContext context, IAwaitable<string> result)
         {
             currentPregunta = await result;
-            PromptDialog.Text(context, After_RespuestaPrompt, $"Ahora escriba la respuesta de la pregunta {currentPregunta}.");
+            PromptDialog.Text(context, After_RespuestaPrompt, $"Ahora escriba una respuesta de la pregunta {currentPregunta}.");
         }
 
         private async Task After_RespuestaPrompt(IDialogContext context, IAwaitable<string> result)
         {
-            currentRespuesta = await result;
-            PreguntaServiceClient preguntaserviceClient = new PreguntaServiceClient();
-            preguntaserviceClient.crear(1, 1, currentPregunta, "1", currentRespuesta);
+            try
+            {
+                currentRespuesta = await result;
+                int currentCursoint = Int32.Parse(currentCurso);
 
-            //CreditoServiceClient creditoServiceClient = new CreditoServiceClient();
-            //Credito credito = new Credito();
-            //credito.CodCredito = 9;
-            //credito.CodAlumno = "A09";
-            //credito.CodCurso = "C01";
-            //credito.CodDescripcion = "P10";
-            //credito.Tipo = "P";
-            //creditoServiceClient.CrearCredito(credito);
+                PreguntaServiceClient preguntaserviceClient = new PreguntaServiceClient();
+                var x = preguntaserviceClient.crear(token, currentCursoint, currentPregunta, "1", currentRespuesta);
 
-            await context.PostAsync($"Gracias por contribuir con Ask Bot Upecino!");
+                CreditoServiceClient creditoServiceClient = new CreditoServiceClient();
+                Credito credito = new Credito();
+                credito.CodCredito = 9;
+                credito.CodAlumno = token;
+                credito.CodCurso = currentCurso;
+                credito.CodDescripcion = x.IDPregunta.ToString();
+                credito.Tipo = "";
+                creditoServiceClient.CrearCredito(credito);
 
-            context.Wait(MessageReceived);
+                await context.PostAsync($"Gracias por contribuir con Ask Bot Upecino!");
+
+                context.Wait(MessageReceived);
+            }
+            catch (Exception ex)
+            {
+                await context.PostAsync($"{ex.Message.ToString()}");
+                context.Wait(MessageReceived);
+            }
+            
         }
         //fin flujo pregunta
 

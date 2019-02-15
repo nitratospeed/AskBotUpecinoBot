@@ -3,7 +3,7 @@
   <xs:complexType name="Pregunta">
     <xs:sequence>
       <xs:element minOccurs="0" name="Descripcion" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="IDAlumno" type="xs:int" />
+      <xs:element minOccurs="0" name="IDAlumno" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IDCurso" type="xs:int" />
       <xs:element minOccurs="0" name="IDPregunta" type="xs:int" />
       <xs:element minOccurs="0" name="Nivel" nillable="true" type="xs:string" />
@@ -11,13 +11,13 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Pregunta" nillable="true" type="tns:Pregunta" />
-  <xs:complexType name="PreguntaExistente">
+  <xs:complexType name="ErrorPresentado">
     <xs:sequence>
       <xs:element minOccurs="0" name="CodigoError" type="xs:int" />
       <xs:element minOccurs="0" name="MensajeError" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="PreguntaExistente" nillable="true" type="tns:PreguntaExistente" />
+  <xs:element name="ErrorPresentado" nillable="true" type="tns:ErrorPresentado" />
   <xs:complexType name="Curso">
     <xs:sequence>
       <xs:element minOccurs="0" name="IdCurso" type="xs:int" />
@@ -32,4 +32,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfCurso" nillable="true" type="tns:ArrayOfCurso" />
+  <xs:complexType name="ArrayOfPregunta">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Pregunta" nillable="true" type="tns:Pregunta" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPregunta" nillable="true" type="tns:ArrayOfPregunta" />
 </xs:schema>

@@ -26,7 +26,7 @@ namespace LuisBot.PreguntaService {
         private string DescripcionField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int IDAlumnoField;
+        private string IDAlumnoField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int IDCursoField;
@@ -64,12 +64,12 @@ namespace LuisBot.PreguntaService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int IDAlumno {
+        public string IDAlumno {
             get {
                 return this.IDAlumnoField;
             }
             set {
-                if ((this.IDAlumnoField.Equals(value) != true)) {
+                if ((object.ReferenceEquals(this.IDAlumnoField, value) != true)) {
                     this.IDAlumnoField = value;
                     this.RaisePropertyChanged("IDAlumno");
                 }
@@ -140,9 +140,9 @@ namespace LuisBot.PreguntaService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PreguntaExistente", Namespace="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ErrorPresentado", Namespace="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio")]
     [System.SerializableAttribute()]
-    public partial class PreguntaExistente : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class ErrorPresentado : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -281,31 +281,37 @@ namespace LuisBot.PreguntaService {
     public interface IPreguntaService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/preguntar", ReplyAction="http://tempuri.org/IPreguntaService/preguntarResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(LuisBot.PreguntaService.PreguntaExistente), Action="http://tempuri.org/IPreguntaService/preguntarPreguntaExistenteFault", Name="PreguntaExistente", Namespace="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio")]
+        [System.ServiceModel.FaultContractAttribute(typeof(LuisBot.PreguntaService.ErrorPresentado), Action="http://tempuri.org/IPreguntaService/preguntarErrorPresentadoFault", Name="ErrorPresentado", Namespace="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio")]
         LuisBot.PreguntaService.Pregunta preguntar(int IDPregunta);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/preguntar", ReplyAction="http://tempuri.org/IPreguntaService/preguntarResponse")]
         System.Threading.Tasks.Task<LuisBot.PreguntaService.Pregunta> preguntarAsync(int IDPregunta);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/crear", ReplyAction="http://tempuri.org/IPreguntaService/crearResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(LuisBot.PreguntaService.PreguntaExistente), Action="http://tempuri.org/IPreguntaService/crearPreguntaExistenteFault", Name="PreguntaExistente", Namespace="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio")]
-        LuisBot.PreguntaService.Pregunta crear(int IDAlumno, int IDcurso, string Descripcion, string Nivel, string respuesta);
+        [System.ServiceModel.FaultContractAttribute(typeof(LuisBot.PreguntaService.ErrorPresentado), Action="http://tempuri.org/IPreguntaService/crearErrorPresentadoFault", Name="ErrorPresentado", Namespace="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio")]
+        LuisBot.PreguntaService.Pregunta crear(string IDAlumno, int IDcurso, string Descripcion, string Nivel, string respuesta);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/crear", ReplyAction="http://tempuri.org/IPreguntaService/crearResponse")]
-        System.Threading.Tasks.Task<LuisBot.PreguntaService.Pregunta> crearAsync(int IDAlumno, int IDcurso, string Descripcion, string Nivel, string respuesta);
+        System.Threading.Tasks.Task<LuisBot.PreguntaService.Pregunta> crearAsync(string IDAlumno, int IDcurso, string Descripcion, string Nivel, string respuesta);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/cursado", ReplyAction="http://tempuri.org/IPreguntaService/cursadoResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(LuisBot.PreguntaService.PreguntaExistente), Action="http://tempuri.org/IPreguntaService/cursadoPreguntaExistenteFault", Name="PreguntaExistente", Namespace="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio")]
-        LuisBot.PreguntaService.Curso cursado(int IDCurso);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/ObtenerCurso", ReplyAction="http://tempuri.org/IPreguntaService/ObtenerCursoResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(LuisBot.PreguntaService.ErrorPresentado), Action="http://tempuri.org/IPreguntaService/ObtenerCursoErrorPresentadoFault", Name="ErrorPresentado", Namespace="http://schemas.datacontract.org/2004/07/ProyectoPregunta.Dominio")]
+        LuisBot.PreguntaService.Curso ObtenerCurso(int IDCurso);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/cursado", ReplyAction="http://tempuri.org/IPreguntaService/cursadoResponse")]
-        System.Threading.Tasks.Task<LuisBot.PreguntaService.Curso> cursadoAsync(int IDCurso);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/ObtenerCurso", ReplyAction="http://tempuri.org/IPreguntaService/ObtenerCursoResponse")]
+        System.Threading.Tasks.Task<LuisBot.PreguntaService.Curso> ObtenerCursoAsync(int IDCurso);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/ListarCurso", ReplyAction="http://tempuri.org/IPreguntaService/ListarCursoResponse")]
         LuisBot.PreguntaService.Curso[] ListarCurso();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/ListarCurso", ReplyAction="http://tempuri.org/IPreguntaService/ListarCursoResponse")]
         System.Threading.Tasks.Task<LuisBot.PreguntaService.Curso[]> ListarCursoAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/ListarPregunta", ReplyAction="http://tempuri.org/IPreguntaService/ListarPreguntaResponse")]
+        LuisBot.PreguntaService.Pregunta[] ListarPregunta();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPreguntaService/ListarPregunta", ReplyAction="http://tempuri.org/IPreguntaService/ListarPreguntaResponse")]
+        System.Threading.Tasks.Task<LuisBot.PreguntaService.Pregunta[]> ListarPreguntaAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -343,20 +349,20 @@ namespace LuisBot.PreguntaService {
             return base.Channel.preguntarAsync(IDPregunta);
         }
         
-        public LuisBot.PreguntaService.Pregunta crear(int IDAlumno, int IDcurso, string Descripcion, string Nivel, string respuesta) {
+        public LuisBot.PreguntaService.Pregunta crear(string IDAlumno, int IDcurso, string Descripcion, string Nivel, string respuesta) {
             return base.Channel.crear(IDAlumno, IDcurso, Descripcion, Nivel, respuesta);
         }
         
-        public System.Threading.Tasks.Task<LuisBot.PreguntaService.Pregunta> crearAsync(int IDAlumno, int IDcurso, string Descripcion, string Nivel, string respuesta) {
+        public System.Threading.Tasks.Task<LuisBot.PreguntaService.Pregunta> crearAsync(string IDAlumno, int IDcurso, string Descripcion, string Nivel, string respuesta) {
             return base.Channel.crearAsync(IDAlumno, IDcurso, Descripcion, Nivel, respuesta);
         }
         
-        public LuisBot.PreguntaService.Curso cursado(int IDCurso) {
-            return base.Channel.cursado(IDCurso);
+        public LuisBot.PreguntaService.Curso ObtenerCurso(int IDCurso) {
+            return base.Channel.ObtenerCurso(IDCurso);
         }
         
-        public System.Threading.Tasks.Task<LuisBot.PreguntaService.Curso> cursadoAsync(int IDCurso) {
-            return base.Channel.cursadoAsync(IDCurso);
+        public System.Threading.Tasks.Task<LuisBot.PreguntaService.Curso> ObtenerCursoAsync(int IDCurso) {
+            return base.Channel.ObtenerCursoAsync(IDCurso);
         }
         
         public LuisBot.PreguntaService.Curso[] ListarCurso() {
@@ -365,6 +371,14 @@ namespace LuisBot.PreguntaService {
         
         public System.Threading.Tasks.Task<LuisBot.PreguntaService.Curso[]> ListarCursoAsync() {
             return base.Channel.ListarCursoAsync();
+        }
+        
+        public LuisBot.PreguntaService.Pregunta[] ListarPregunta() {
+            return base.Channel.ListarPregunta();
+        }
+        
+        public System.Threading.Tasks.Task<LuisBot.PreguntaService.Pregunta[]> ListarPreguntaAsync() {
+            return base.Channel.ListarPreguntaAsync();
         }
     }
 }

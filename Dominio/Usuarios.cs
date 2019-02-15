@@ -5,7 +5,12 @@ using System.Web;
 
 namespace LuisBot.Dominio
 {
-    public class Usuarios
+    public class LogIn
+    {
+        public string access_token { get; set; }
+    }
+
+    public class SignUp
     {
         public string access_token { get; set; }
         public string email { get; set; }
@@ -15,7 +20,7 @@ namespace LuisBot.Dominio
         public string role { get; set; }
     }
 
-    public class UsuarioCreado
+    public class UsuarioObtenido
     {
         public string token { get; set; }
         public user user { get; set; }
@@ -24,5 +29,10 @@ namespace LuisBot.Dominio
     public class user
     {
         public string name { get; set; }
+    }
+
+    public class UsuarioError
+    {
+        public string message { get; set; }
     }
 }
