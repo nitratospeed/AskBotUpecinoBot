@@ -211,6 +211,7 @@
     <Compile Include="Dialogs\BasicLuisDialog.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dominio\Cursos.cs" />
+    <Compile Include="Dominio\PreguntaQueue.cs" />
     <Compile Include="Dominio\Usuarios.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

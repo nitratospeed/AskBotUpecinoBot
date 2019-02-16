@@ -335,14 +335,49 @@ namespace Microsoft.Bot.Sample.LuisBot
                 PreguntaServiceClient preguntaserviceClient = new PreguntaServiceClient();
                 var x = preguntaserviceClient.crear(token, currentCursoint, currentPregunta, "1", currentRespuesta);
 
-                CreditoServiceClient creditoServiceClient = new CreditoServiceClient();
-                Credito credito = new Credito();
-                credito.CodCredito = 9;
-                credito.CodAlumno = token;
-                credito.CodCurso = currentCurso;
-                credito.CodDescripcion = x.IDPregunta.ToString();
-                credito.Tipo = "";
-                creditoServiceClient.CrearCredito(credito);
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                string tramaJson = "";
+
+                PreguntaQueue preguntax = new PreguntaQueue
+                {
+                    idPregunta = idPregunta,
+                    PreguntaTxt = currentPregunta,
+                    idCurso= currentCurso,
+                    idUsuario = token
+
+                };
+
+                string postdata = js.Serialize(preguntax);
+
+                byte[] dataBytes = Encoding.UTF8.GetBytes(postdata);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://askbotupecinoservice.azurewebsites.net/PreguntaLogService.svc/PreguntaLogService");
+
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                request.ContentLength = dataBytes.Length;
+                request.ContentType = "application/json";
+                request.Method = "POST";
+
+                using (Stream requestBody = request.GetRequestStream())
+                {
+                    requestBody.Write(dataBytes, 0, dataBytes.Length);
+                }
+
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                //using (StreamReader reader = new StreamReader(stream))
+                //{
+                //    tramaJson = reader.ReadToEnd();
+                //}
+
+                //CreditoServiceClient creditoServiceClient = new CreditoServiceClient();
+                //Credito credito = new Credito();
+                //credito.CodCredito = 9;
+                //credito.CodAlumno = token;
+                //credito.CodCurso = currentCurso;
+                //credito.CodDescripcion = "EXzxz";
+                //credito.Tipo = "";
+                //creditoServiceClient.CrearCredito(credito);
 
                 await context.PostAsync($"Gracias por contribuir con Ask Bot Upecino!");
 
